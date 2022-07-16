@@ -4,30 +4,11 @@
 
 #define BUFFER_SIZE 256
 
-// void subcommand(char buf[], char *argv[], int argc) {
-//   int i = 0;
-//   if (fork() == 0) {
-//     printf("Buffer Contents : %s\n", buf);
-//
-//     for (i = 0; i < argc; i++) {
-//       printf("[Debug] Inside sub-fn, args [%d] : %s\n", i, argv[i]);
-//     }
-//
-//     exec(argv[0], argv);
-//   } else {
-//     wait((int*) 0);
-//   }
-// }
-
 void subcommand(char *argv[], int argc) {
-  // int i = 0;
   if (fork() == 0) {
-    // for (i = 0; i < argc; i++) {
-    //   printf("[Debug] Inside sub-fn, args [%d] : %s\n", i, argv[i]);
-    // }
     exec(argv[0], argv);
   } else {
-    wait((int *)0);
+    wait((int *) 0);
   }
 }
 
@@ -52,26 +33,22 @@ int main(int argc, char *argv[]) {
   while (read(0, cur, 1) > 0) {
     d_cnt++;
     switch (*cur) {
-      case ' ':
-        *cur = '\0';
+      case ' ':*cur = '\0';
         args[sub_argc] = word;
         sub_argc++;
         cur++;
         word = cur;
         break;
-      case '\n':
-        *cur = '\0';
+      case '\n':*cur = '\0';
         args[sub_argc] = word;
         sub_argc++;
         subcommand(args, sub_argc);
         cur++;
         sub_argc = argc - 1;  // reset to initial value for next call.
         break;
-      case '\0':
-        subcommand(args, sub_argc);
+      case '\0':subcommand(args, sub_argc);
         break;
-      default:
-        cur++;
+      default:cur++;
         break;
     }
   }
